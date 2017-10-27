@@ -1,0 +1,43 @@
+-- insert table name
+WW GPSC_Shipments_Log206_V2
+
+-- linked condition 
+
+[BIM].[BIM].[BMA_L1_GPSC_SHIPMENTS]   key [Unique Link Key]    link [BIM].[dbo].[BMA_L2_Events]   field [Part Actual SL]    FY17 Q1
+[SO_PO_DOCUMENT_TYPE]in('ZMUL',
+'ZMLI',
+'ZSSB',
+'ZSKB',
+'ZSOE',
+'ZSPC',
+'ZSIU',
+'ZPPI',
+'ZPTP',
+'ZSTF',
+'FLSO',
+'ZSTE',
+'ZS1O',
+'ZSGR',
+'ZSOR',
+'ZDEF',
+'ZDFI',
+'ZSTD',
+'ZPHI',
+'ZPMI',
+'ZPTH',
+'ZPTM',
+'ZSEO',
+'ZSCB',
+'ZSTG',
+'ZPFI',
+'ZPTF',
+'ZSFD',
+'ZSCR',
+'ZSOB',
+'ZFTR',
+'ZSOF',
+'ZSOV',
+'ZIC',
+'ZI1O') 
+
+-- 
