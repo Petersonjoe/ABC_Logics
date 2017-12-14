@@ -1,0 +1,635 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="12/21/2016 6:11:20 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="BEDEV05"
+  DTS:CreatorName="ASIAPACIFIC\leij"
+  DTS:DTSID="{DB905B1E-52C0-450A-A282-5D9B27753EB8}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="12.0.2430.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="ABC_Load_NRS_RVS"
+  DTS:PackageType="5"
+  DTS:VersionBuild="4"
+  DTS:VersionGUID="{514365BB-E128-4A9B-9185-DCECDEE8129D}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\!!!Change the report month"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{BF420A44-F745-4080-A248-37B844358962}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="!!!Change the report month"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\!!!Change the report month\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[rawdata].[HPRT4_iCOST_SVC_REGIONAL]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\!!!Change the report month\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="{875E73D9-3D0F-42C4-9D3C-91230BB2D897}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[bedev05.ABC]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Part No]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Part No"
+                      externalMetadataColumnId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Part No]"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[Part No]" />
+                    <inputColumn
+                      refId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[New Buy]"
+                      cachedDataType="r8"
+                      cachedName="New Buy"
+                      externalMetadataColumnId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[New Buy]"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[New Buy]" />
+                    <inputColumn
+                      refId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[RVS]"
+                      cachedDataType="r8"
+                      cachedName="RVS"
+                      externalMetadataColumnId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[RVS]"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[RVS]" />
+                    <inputColumn
+                      refId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[NRS]"
+                      cachedDataType="r8"
+                      cachedName="NRS"
+                      externalMetadataColumnId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[NRS]"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[NRS]" />
+                    <inputColumn
+                      refId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Region]"
+                      cachedDataType="wstr"
+                      cachedLength="10"
+                      cachedName="Region"
+                      externalMetadataColumnId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Region]"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[Region]" />
+                    <inputColumn
+                      refId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Report Month]"
+                      cachedDataType="wstr"
+                      cachedLength="10"
+                      cachedName="Report Month"
+                      externalMetadataColumnId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Report Month]"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[Report Month]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Part No]"
+                      dataType="wstr"
+                      length="255"
+                      name="Part No" />
+                    <externalMetadataColumn
+                      refId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[New Buy]"
+                      dataType="r8"
+                      name="New Buy" />
+                    <externalMetadataColumn
+                      refId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[RVS]"
+                      dataType="r8"
+                      name="RVS" />
+                    <externalMetadataColumn
+                      refId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[NRS]"
+                      dataType="r8"
+                      name="NRS" />
+                    <externalMetadataColumn
+                      refId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Region]"
+                      dataType="wstr"
+                      length="10"
+                      name="Region" />
+                    <externalMetadataColumn
+                      refId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Report Month]"
+                      dataType="wstr"
+                      length="10"
+                      name="Report Month" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\!!!Change the report month\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\!!!Change the report month\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\!!!Change the report month\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\!!!Change the report month\OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT 
+       [Part No]
+      ,[New Buy]
+      ,[RV] AS [RVS]
+      ,[Net Repair] AS [NRS]
+      ,[Region]
+      ,[Report Month]
+  FROM [WebSite].[dbo].[MD_iCost_SVC_Regional]
+  --where [Report Month] = '201610'</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\!!!Change the report month\OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="{A605C0E4-7A3B-4516-BA73-589F23B2D131}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[hprt4.WebSite]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[Part No]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Part No]"
+                      length="255"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[Part No]"
+                      name="Part No"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[New Buy]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[New Buy]"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[New Buy]"
+                      name="New Buy"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[RVS]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[RVS]"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[RVS]"
+                      name="RVS"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[NRS]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[NRS]"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[NRS]"
+                      name="NRS"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[Region]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Region]"
+                      length="10"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[Region]"
+                      name="Region"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[Report Month]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Report Month]"
+                      length="10"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].Columns[Report Month]"
+                      name="Report Month"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Part No]"
+                      dataType="wstr"
+                      length="255"
+                      name="Part No" />
+                    <externalMetadataColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[New Buy]"
+                      dataType="r8"
+                      name="New Buy" />
+                    <externalMetadataColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[RVS]"
+                      dataType="r8"
+                      name="RVS" />
+                    <externalMetadataColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[NRS]"
+                      dataType="r8"
+                      name="NRS" />
+                    <externalMetadataColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Region]"
+                      dataType="wstr"
+                      length="10"
+                      name="Region" />
+                    <externalMetadataColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Report Month]"
+                      dataType="wstr"
+                      length="10"
+                      name="Report Month" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Part No]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Part No]"
+                      name="Part No" />
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[New Buy]"
+                      dataType="r8"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[New Buy]"
+                      name="New Buy" />
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[RVS]"
+                      dataType="r8"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[RVS]"
+                      name="RVS" />
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[NRS]"
+                      dataType="r8"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[NRS]"
+                      name="NRS" />
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Region]"
+                      dataType="wstr"
+                      length="10"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Region]"
+                      name="Region" />
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Report Month]"
+                      dataType="wstr"
+                      length="10"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Report Month]"
+                      name="Report Month" />
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\!!!Change the report month.Paths[OLE DB Source Output]"
+              endId="Package\!!!Change the report month\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="OLE DB Source Output"
+              startId="Package\!!!Change the report month\OLE DB Source.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate table SVC"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{35F59D7D-0015-4B45-BB1D-634270257827}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate table SVC"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{875E73D9-3D0F-42C4-9D3C-91230BB2D897}"
+          SQLTask:SqlStatementSource="truncate table [rawdata].[HPRT4_iCOST_SVC_REGIONAL]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Update Region Name"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{DE25F4F7-EDC9-4C43-A67C-50A970A1794A}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Update Region Name"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{875E73D9-3D0F-42C4-9D3C-91230BB2D897}"
+          SQLTask:SqlStatementSource="UPDATE rawdata.HPRT4_iCOST_SVC_REGIONAL&#xA;SET [Region] = 'AME' &#xA;WHERE [Region] = 'AMS'" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{93FEED1A-5C98-4E8A-8CD6-B976ED8EF299}"
+      DTS:From="Package\Truncate table SVC"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\!!!Change the report month" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{E9B470E2-984B-4D01-AE59-567CF85BF4D8}"
+      DTS:From="Package\!!!Change the report month"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Update Region Name" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="sql12">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="209,42"
+          Id="Package\!!!Change the report month"
+          TopLeft="134,192" />
+        <NodeLayout
+          Size="169,42"
+          Id="Package\Truncate table SVC"
+          TopLeft="84,67" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="168.5,109">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="70,83"
+              Start="0,0"
+              End="70,75.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,37.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,37.5"
+                    Point2="0,41.5"
+                    Point3="4,41.5" />
+                  <mssgle:LineSegment
+                    End="66,41.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="66,41.5"
+                    Point2="70,41.5"
+                    Point3="70,45.5" />
+                  <mssgle:LineSegment
+                    End="70,75.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="179,42"
+          Id="Package\Update Region Name"
+          TopLeft="258,300" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="238.5,234">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="109,66"
+              Start="0,0"
+              End="109,58.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,29" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,29"
+                    Point2="0,33"
+                    Point3="4,33" />
+                  <mssgle:LineSegment
+                    End="105,33" />
+                  <mssgle:CubicBezierSegment
+                    Point1="105,33"
+                    Point2="109,33"
+                    Point3="109,37" />
+                  <mssgle:LineSegment
+                    End="109,58.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\!!!Change the report month">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="150,42"
+          Id="Package\!!!Change the report month\OLE DB Source"
+          TopLeft="294,131" />
+        <NodeLayout
+          Size="171,42"
+          Id="Package\!!!Change the report month\OLE DB Destination"
+          TopLeft="280,309" />
+        <EdgeLayout
+          Id="Package\!!!Change the report month.Paths[OLE DB Source Output]"
+          TopLeft="367.25,173">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,136"
+              Start="0,0"
+              End="0,128.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,128.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\!!!Change the report month\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\!!!Change the report month\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

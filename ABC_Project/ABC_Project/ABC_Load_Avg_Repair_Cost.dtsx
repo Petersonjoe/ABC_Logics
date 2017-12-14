@@ -1,0 +1,1507 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="1/4/2017 6:02:25 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="BEDEV05"
+  DTS:CreatorName="ASIAPACIFIC\leij"
+  DTS:DTSID="{2D7EA26D-5FD3-4016-897B-44E029D273CF}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="12.0.2430.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="ABC_Load_Avg_Repair_Cost"
+  DTS:PackageType="5"
+  DTS:VersionBuild="24"
+  DTS:VersionGUID="{39C0028E-1FE1-41C3-96BB-677A58ED4D31}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{B3CF3B79-BA30-49B9-BB0E-CD767E2E4A3D}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="&quot;WITH T AS( SELECT A.[Region] AS [Region A]&#xA;      ,A.[Material] AS [Material A]&#xA;&#x9;  ,A.[OOW Avg Repair Cost]&#xA;      ,B.[Region] AS [Region B]&#xA;&#x9;  ,B.Material AS [Material B]&#xA;&#x9;  ,B.[OOW/IW Avg Repair Cost]&#xA;  FROM (&#xA;&#x9;&#x9;SELECT [Region]&#xA;&#x9;&#x9;&#x9;  ,[Material]&#xA;&#x9;&#x9;&#x9;  ,sum(abs([PO&amp;DF Spend]))/sum(abs([PO&amp;DF Qty])) as [OOW Avg Repair Cost]&#xA;&#x9;&#x9;  FROM [E2.2].[dbo].[WW_Order_CIM]&#xA;&#x9;&#x9; WHERE [Sub_Order_Type] in ('YI1P','ZSR','ZSRA')&#xA;&#x9;&#x9;   AND [Fiscal_Year] = '&quot; + @[User::FiscalY] +&#xA;&#x9;&#x9; &quot;' AND [Fiscal_Qtr]  = '&quot; + @[User::FiscalQ] + &#xA;&#x9;   &quot;' GROUP BY [Region]&#xA;&#x9;&#x9;&#x9;  ,[Material]) A&#xA;FULL OUTER JOIN (&#xA;&#x9;&#x9;&#x9;SELECT [Region]&#xA;&#x9;&#x9;&#x9;&#x9;  ,[Material]&#xA;&#x9;&#x9;&#x9;&#x9;  ,sum(abs([PO&amp;DF Spend]))/sum(abs([PO&amp;DF Qty])) as [OOW/IW Avg Repair Cost]&#xA;&#x9;&#x9;&#x9;  FROM [E2.2].[dbo].[WW_Order_CIM]&#xA;&#x9;&#x9;&#x9; WHERE [Sub_Order_Type] in ('YI1P','ZSR','ZSRA','ZSX')&#xA;&#x9;&#x9;&#x9;   AND [Fiscal_Year] = '&quot; + @[User::FiscalY] +&#xA;&#x9;&#x9;&#x9; &quot;' AND [Fiscal_Qtr]  = '&quot; + @[User::FiscalQ] +&#xA;&#x9;&#x9;   &quot;' GROUP BY [Region]&#xA;&#x9;&#x9;&#x9;&#x9;  ,[Material]) B&#xA;ON A.Region = B.Region AND A.Material = B.Material)&#xA;SELECT &#xA;     Region = CASE WHEN ISNULL([Region A],'') = '' AND [Region B] = 'AMS' THEN 'AME'&#xA;&#x9;               WHEN ISNULL([Region A],'') = '' AND [Region B] != 'AMS' THEN [Region B]&#xA;                   WHEN ISNULL([Region B],'') = '' AND [Region A] = 'AMS' THEN 'AME'&#xA;&#x9;&#x9;&#x9;&#x9;   WHEN ISNULL([Region B],'') = '' AND [Region A] != 'AMS' THEN [Region A]&#xA;&#x9;&#x9;&#x9;       WHEN ISNULL([Region B],'') != '' AND ISNULL([Region A],'') != ''&#xA;&#x9;&#x9;&#x9;&#x9;    AND [Region B] = 'AMS' THEN 'AME'&#xA;&#x9;&#x9;&#x9;&#x9;   ELSE [Region B]&#xA;&#x9;&#x9;&#x9;  END,&#xA;&#x9; Material = CASE WHEN ISNULL([Material A],'') = '' THEN [Material B]&#xA;                     WHEN ISNULL([Material B],'') = '' THEN [Material A]&#xA;&#x9;&#x9;&#x9;&#x9;&#x9; ELSE [Material B]&#xA;&#x9;&#x9;&#x9;&#x9;END,&#xA;     [OOW Avg Repair Cost],&#xA;&#x9; [OOW/IW Avg Repair Cost]&#xA;FROM T&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="CalcLogic">
+      <DTS:VariableValue
+        DTS:DataType="8">WITH T AS( SELECT A.[Region] AS [Region A]
+      ,A.[Material] AS [Material A]
+	  ,A.[OOW Avg Repair Cost]
+      ,B.[Region] AS [Region B]
+	  ,B.Material AS [Material B]
+	  ,B.[OOW/IW Avg Repair Cost]
+  FROM (
+		SELECT [Region]
+			  ,[Material]
+			  ,sum(abs([PO&amp;DF Spend]))/sum(abs([PO&amp;DF Qty])) as [OOW Avg Repair Cost]
+		  FROM [E2.2].[dbo].[WW_Order_CIM]
+		 WHERE [Sub_Order_Type] in ('YI1P','ZSR','ZSRA')
+		   AND [Fiscal_Year] = '2017' AND [Fiscal_Qtr]  = 'Q3' GROUP BY [Region]
+			  ,[Material]) A
+FULL OUTER JOIN (
+			SELECT [Region]
+				  ,[Material]
+				  ,sum(abs([PO&amp;DF Spend]))/sum(abs([PO&amp;DF Qty])) as [OOW/IW Avg Repair Cost]
+			  FROM [E2.2].[dbo].[WW_Order_CIM]
+			 WHERE [Sub_Order_Type] in ('YI1P','ZSR','ZSRA','ZSX')
+			   AND [Fiscal_Year] = '2017' AND [Fiscal_Qtr]  = 'Q3' GROUP BY [Region]
+				  ,[Material]) B
+ON A.Region = B.Region AND A.Material = B.Material)
+SELECT 
+     Region = CASE WHEN ISNULL([Region A],'') = '' AND [Region B] = 'AMS' THEN 'AME'
+	               WHEN ISNULL([Region A],'') = '' AND [Region B] != 'AMS' THEN [Region B]
+                   WHEN ISNULL([Region B],'') = '' AND [Region A] = 'AMS' THEN 'AME'
+				   WHEN ISNULL([Region B],'') = '' AND [Region A] != 'AMS' THEN [Region A]
+			       WHEN ISNULL([Region B],'') != '' AND ISNULL([Region A],'') != ''
+				    AND [Region B] = 'AMS' THEN 'AME'
+				   ELSE [Region B]
+			  END,
+	 Material = CASE WHEN ISNULL([Material A],'') = '' THEN [Material B]
+                     WHEN ISNULL([Material B],'') = '' THEN [Material A]
+					 ELSE [Material B]
+				END,
+     [OOW Avg Repair Cost],
+	 [OOW/IW Avg Repair Cost]
+FROM T</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{2563BFE4-2158-41CC-A965-FC5BC7338E1D}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FiscalQ">
+      <DTS:VariableValue
+        DTS:DataType="8">Q3</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{94ED3A2E-4B4C-4EB7-9B2D-610AB0947928}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FiscalY">
+      <DTS:VariableValue
+        DTS:DataType="8">2017</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{CACB8D70-BD65-467D-9D00-E524C381C491}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FYFQ">
+      <DTS:VariableValue
+        DTS:DataType="8">2017Q3</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Clean current data"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{77C3CCEF-5938-4AD4-AF22-F08A029E6DF8}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Clean current data"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{875E73D9-3D0F-42C4-9D3C-91230BB2D897}"
+          SQLTask:SqlStatementSource="DELETE FROM rawdata.E2_2_AVG_REPAIR_COST&#xA;WHERE [Data Period] = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="@FYFQ"
+            SQLTask:DtsVariableName="User::FYFQ"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="129"
+            SQLTask:ParameterSize="-1" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Clean Supporting Data"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{6527FAE0-E5A7-4A64-846E-E95D9DD50782}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Clean Supporting Data"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{875E73D9-3D0F-42C4-9D3C-91230BB2D897}"
+          SQLTask:SqlStatementSource="DELETE FROM [rawdata].[E2_2_AVG_REPAIR_COST_SUPPORTING_TABLE]&#xA;WHERE [Data Period] = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="@FYFQ"
+            SQLTask:DtsVariableName="User::FYFQ"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="130"
+            SQLTask:ParameterSize="-1" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Data Flow Task"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{A4CF265B-8D13-433A-A72F-57A4DA03CFC1}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Data Flow Task"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Data Flow Task\Data Conversion"
+              componentClassID="Microsoft.DataConvert"
+              contactInfo="Data Conversion;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Data Conversion"
+              name="Data Conversion"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\Data Conversion.Inputs[Data Conversion Input]"
+                  name="Data Conversion Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Inputs[Data Conversion Input].Columns[Material]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="Material"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Material]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output]"
+                  exclusionGroup="1"
+                  name="Data Conversion Output"
+                  synchronousInputId="Package\Data Flow Task\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Material]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="50"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Material]"
+                      name="Copy of Material"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Material]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Data Conversion Error Output"
+                  synchronousInputId="Package\Data Flow Task\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[rawdata].[E2_2_AVG_REPAIR_COST]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="{875E73D9-3D0F-42C4-9D3C-91230BB2D897}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[bedev05.ABC]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Region]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="Region"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Region]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Region]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[OOW Avg Repair Cost]"
+                      cachedDataType="r8"
+                      cachedName="OOW Avg Repair Cost"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[OOW Avg Repair Cost]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[OOW Avg Repair Cost]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[OOW/IW Avg Repair Cost]"
+                      cachedDataType="r8"
+                      cachedName="OOW/IW Avg Repair Cost"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[OOW/IW Avg Repair Cost]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[OOW/IW Avg Repair Cost]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Copy of Material]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="Copy of Material"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Material]"
+                      lineageId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Material]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Region]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="Region" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Material]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="Material" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[OOW Avg Repair Cost]"
+                      dataType="r8"
+                      name="OOW Avg Repair Cost" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[OOW/IW Avg Repair Cost]"
+                      dataType="r8"
+                      name="OOW/IW Avg Repair Cost" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Data Period]"
+                      dataType="wstr"
+                      length="6"
+                      name="Data Period" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">WITH T AS( SELECT A.[Region] AS [Region A]
+      ,A.[Material] AS [Material A]
+	  ,A.[OOW Avg Repair Cost]
+      ,B.[Region] AS [Region B]
+	  ,B.Material AS [Material B]
+	  ,B.[OOW/IW Avg Repair Cost]
+  FROM (
+		SELECT [Region]
+			  ,[Material]
+			  ,sum(abs([PO&amp;DF Spend]))/sum(abs([PO&amp;DF Qty])) as [OOW Avg Repair Cost]
+		  FROM [E2.2].[dbo].[WW_Order_CIM]
+		 WHERE [Sub_Order_Type] in ('YI1P','ZSR','ZSRA')
+		   AND [Fiscal_Year] = '2017'
+		   AND [Fiscal_Qtr]  = 'Q1'
+		 GROUP BY [Region]
+			  ,[Material]) A
+FULL OUTER JOIN (
+			SELECT [Region]
+				  ,[Material]
+				  ,sum(abs([PO&amp;DF Spend]))/sum(abs([PO&amp;DF Qty])) as [OOW/IW Avg Repair Cost]
+			  FROM [E2.2].[dbo].[WW_Order_CIM]
+			 WHERE [Sub_Order_Type] in ('YI1P','ZSR','ZSRA','ZSX')
+			   AND [Fiscal_Year] = '2017'
+			   AND [Fiscal_Qtr]  = 'Q1'
+			 GROUP BY [Region]
+				  ,[Material]) B
+ON A.Region = B.Region AND A.Material = B.Material)
+SELECT 
+     Region = CASE WHEN ISNULL([Region A],'') = '' AND [Region B] = 'AMS' THEN 'AME'
+	               WHEN ISNULL([Region A],'') = '' AND [Region B] != 'AMS' THEN [Region B]
+                   WHEN ISNULL([Region B],'') = '' AND [Region A] = 'AMS' THEN 'AME'
+				   WHEN ISNULL([Region B],'') = '' AND [Region A] != 'AMS' THEN [Region A]
+			       WHEN ISNULL([Region B],'') != '' AND ISNULL([Region A],'') != ''
+				    AND [Region B] = 'AMS' THEN 'AME'
+				   ELSE [Region B]
+			  END,
+	 Material = CASE WHEN ISNULL([Material A],'') = '' THEN [Material B]
+                     WHEN ISNULL([Material B],'') = '' THEN [Material A]
+					 ELSE [Material B]
+				END,
+     [OOW Avg Repair Cost],
+	 [OOW/IW Avg Repair Cost]
+FROM T</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable">User::CalcLogic</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task\OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="{09A5699B-0609-4806-ACDC-8821E9B9B4ED}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[gcrcpdw3.cn.hpecorp.net.E2.2]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Region]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Region]"
+                      length="10"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Region]"
+                      name="Region"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Material]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Material]"
+                      length="50"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Material]"
+                      name="Material"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[OOW Avg Repair Cost]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OOW Avg Repair Cost]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[OOW Avg Repair Cost]"
+                      name="OOW Avg Repair Cost"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[OOW/IW Avg Repair Cost]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OOW/IW Avg Repair Cost]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[OOW/IW Avg Repair Cost]"
+                      name="OOW/IW Avg Repair Cost"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Region]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="Region" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Material]"
+                      dataType="wstr"
+                      length="50"
+                      name="Material" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OOW Avg Repair Cost]"
+                      dataType="r8"
+                      name="OOW Avg Repair Cost" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[OOW/IW Avg Repair Cost]"
+                      dataType="r8"
+                      name="OOW/IW Avg Repair Cost" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Region]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Region]"
+                      name="Region" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Material]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Material]"
+                      name="Material" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OOW Avg Repair Cost]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OOW Avg Repair Cost]"
+                      name="OOW Avg Repair Cost" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OOW/IW Avg Repair Cost]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[OOW/IW Avg Repair Cost]"
+                      name="OOW/IW Avg Repair Cost" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Data Flow Task.Paths[Data Conversion Output]"
+              endId="Package\Data Flow Task\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="Data Conversion Output"
+              startId="Package\Data Flow Task\Data Conversion.Outputs[Data Conversion Output]" />
+            <path
+              refId="Package\Data Flow Task.Paths[OLE DB Source Output]"
+              endId="Package\Data Flow Task\Data Conversion.Inputs[Data Conversion Input]"
+              name="OLE DB Source Output"
+              startId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Flow Raw to Supporting"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{089A5DCB-731C-4ED5-A50B-9133F8A41E12}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Flow Raw to Supporting"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Flow Raw to Supporting\OLE DB Destination 1"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination 1"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[rawdata].[E2_2_AVG_REPAIR_COST_SUPPORTING_TABLE]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Connections[OleDbConnection]"
+                  connectionManagerID="{875E73D9-3D0F-42C4-9D3C-91230BB2D897}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[bedev05.ABC]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].Columns[Region]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="Region"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[Region]"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Region]" />
+                    <inputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].Columns[Vendor Code]"
+                      cachedDataType="wstr"
+                      cachedLength="20"
+                      cachedName="Vendor Code"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[Vendor Code]"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Vendor Code]" />
+                    <inputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].Columns[Vendor Name]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="Vendor Name"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[Vendor Name]"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Vendor Name]" />
+                    <inputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].Columns[PO Type]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="PO Type"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[PO Type]"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[PO Type]" />
+                    <inputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].Columns[PO Number]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="PO Number"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[PO Number]"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[PO Number]" />
+                    <inputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].Columns[Part Number]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="Part Number"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[Part Number]"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Part Number]" />
+                    <inputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].Columns[Total Qty]"
+                      cachedDataType="i4"
+                      cachedName="Total Qty"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[Total Qty]"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Total Qty]" />
+                    <inputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].Columns[Total Spend]"
+                      cachedDataType="r8"
+                      cachedName="Total Spend"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[Total Spend]"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Total Spend]" />
+                    <inputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].Columns[Data Period]"
+                      cachedDataType="wstr"
+                      cachedLength="32"
+                      cachedName="Data Period"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[Data Period]"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Data Period]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[Region]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="Region" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[Vendor Code]"
+                      dataType="wstr"
+                      length="20"
+                      name="Vendor Code" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[Vendor Name]"
+                      dataType="wstr"
+                      length="100"
+                      name="Vendor Name" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[PO Type]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="PO Type" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[PO Number]"
+                      dataType="wstr"
+                      length="50"
+                      name="PO Number" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[Part Number]"
+                      dataType="wstr"
+                      length="50"
+                      name="Part Number" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[Total Qty]"
+                      dataType="i4"
+                      name="Total Qty" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[Total Spend]"
+                      dataType="r8"
+                      name="Total Spend" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[Data Period]"
+                      dataType="wstr"
+                      length="6"
+                      name="Data Period" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Destination 1.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Destination 1.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Destination 1.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Flow Raw to Supporting\OLE DB Source 1"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source 1"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT        [Region]
+, Vendor_ID AS [Vendor Code]
+, Vendor_Name AS [Vendor Name]
+, Sub_Order_Type AS [PO Type]
+, PO_Number AS [PO Number]
+,[Material] as [Part Number]
+, sum([PO&amp;DF Qty]) AS [Total Qty]
+, sum([PO&amp;DF Spend]) AS [Total Spend]
+,(convert(nvarchar,Fiscal_Year) + Fiscal_Qtr) as [Data Period]
+FROM            dbo.WW_Order_CIM
+WHERE        (Sub_Order_Type IN ('YI1P', 'ZSR', 'ZSRA', 'ZSX')) AND (convert(nvarchar,Fiscal_Year) = ?) AND (Fiscal_Qtr = ?)
+group by [region], Vendor_ID, Vendor_Name, Sub_Order_Type, PO_Number, [Material],Fiscal_Year, Fiscal_Qtr</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping">"Parameter0:Input",{94ED3A2E-4B4C-4EB7-9B2D-610AB0947928};"Parameter1:Input",{2563BFE4-2158-41CC-A965-FC5BC7338E1D};</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Flow Raw to Supporting\OLE DB Source 1.Connections[OleDbConnection]"
+                  connectionManagerID="{09A5699B-0609-4806-ACDC-8821E9B9B4ED}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[gcrcpdw3.cn.hpecorp.net.E2.2]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Region]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Region]"
+                      length="10"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Region]"
+                      name="Region"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Vendor Code]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Vendor Code]"
+                      length="20"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Vendor Code]"
+                      name="Vendor Code"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Vendor Name]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Vendor Name]"
+                      length="100"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Vendor Name]"
+                      name="Vendor Name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[PO Type]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[PO Type]"
+                      length="10"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[PO Type]"
+                      name="PO Type"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[PO Number]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[PO Number]"
+                      length="50"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[PO Number]"
+                      name="PO Number"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Part Number]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Part Number]"
+                      length="50"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Part Number]"
+                      name="Part Number"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Total Qty]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Total Qty]"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Total Qty]"
+                      name="Total Qty"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Total Spend]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Total Spend]"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Total Spend]"
+                      name="Total Spend"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Data Period]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Data Period]"
+                      length="32"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].Columns[Data Period]"
+                      name="Data Period"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Region]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="Region" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Vendor Code]"
+                      dataType="wstr"
+                      length="20"
+                      name="Vendor Code" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Vendor Name]"
+                      dataType="wstr"
+                      length="100"
+                      name="Vendor Name" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[PO Type]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="PO Type" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[PO Number]"
+                      dataType="wstr"
+                      length="50"
+                      name="PO Number" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Part Number]"
+                      dataType="wstr"
+                      length="50"
+                      name="Part Number" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Total Qty]"
+                      dataType="i4"
+                      name="Total Qty" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Total Spend]"
+                      dataType="r8"
+                      name="Total Spend" />
+                    <externalMetadataColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output].ExternalColumns[Data Period]"
+                      dataType="wstr"
+                      length="32"
+                      name="Data Period" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Region]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Region]"
+                      name="Region" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Vendor Code]"
+                      dataType="wstr"
+                      length="20"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Vendor Code]"
+                      name="Vendor Code" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Vendor Name]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Vendor Name]"
+                      name="Vendor Name" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PO Type]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PO Type]"
+                      name="PO Type" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PO Number]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[PO Number]"
+                      name="PO Number" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Part Number]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Part Number]"
+                      name="Part Number" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Total Qty]"
+                      dataType="i4"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Total Qty]"
+                      name="Total Qty" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Total Spend]"
+                      dataType="r8"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Total Spend]"
+                      name="Total Spend" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Data Period]"
+                      dataType="wstr"
+                      length="32"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[Data Period]"
+                      name="Data Period" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Flow Raw to Supporting.Paths[OLE DB Source Output]"
+              endId="Package\Flow Raw to Supporting\OLE DB Destination 1.Inputs[OLE DB Destination Input]"
+              name="OLE DB Source Output"
+              startId="Package\Flow Raw to Supporting\OLE DB Source 1.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Update data period"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{6CEE03F4-9D76-430C-97F2-AEA19105B2DC}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Update data period"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{875E73D9-3D0F-42C4-9D3C-91230BB2D897}"
+          SQLTask:SqlStatementSource="UPDATE AA&#xA;SET AA.[Data Period] = ?&#xA;FROM [rawdata].[E2_2_AVG_REPAIR_COST] AA&#xA;WHERE (ISNULL(AA.[Data Period],'') = '') or (AA.[Data Period]='')&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="@FYFQ"
+            SQLTask:DtsVariableName="System::CancelEvent"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="129"
+            SQLTask:ParameterSize="-1" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{9901F4ED-D0F6-4471-8F9E-ED8815E8DD58}"
+      DTS:From="Package\Clean current data"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Clean Supporting Data" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{A77AFE9B-D3FF-4729-888F-52FBA83A9369}"
+      DTS:From="Package\Data Flow Task"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Update data period" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{7753B108-9245-4EC2-8C79-0CA541BE4791}"
+      DTS:From="Package\Clean Supporting Data"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\Flow Raw to Supporting" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{942F7597-6F3B-4346-872C-80EAAA270BB7}"
+      DTS:From="Package\Flow Raw to Supporting"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\Data Flow Task" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="sql12">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="166,42"
+          Id="Package\Clean current data"
+          TopLeft="85,30" />
+        <NodeLayout
+          Size="185,42"
+          Id="Package\Clean Supporting Data"
+          TopLeft="68,115" />
+        <NodeLayout
+          Size="151,42"
+          Id="Package\Data Flow Task"
+          TopLeft="331,251" />
+        <NodeLayout
+          Size="191,42"
+          Id="Package\Flow Raw to Supporting"
+          TopLeft="70,256" />
+        <NodeLayout
+          Size="169,42"
+          Id="Package\Update data period"
+          TopLeft="326,104" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="164.25,72">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,43"
+              Start="0,0"
+              End="0,35.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,35.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="408.5,251">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,-105"
+              Start="0,0"
+              End="0,-97.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,-97.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="163,157">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,99"
+              Start="0,0"
+              End="0,91.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,91.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="261,274.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="70,0"
+              Start="0,0"
+              End="62.5,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="62.5,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Data Flow Task">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="171,42"
+          Id="Package\Data Flow Task\OLE DB Destination"
+          TopLeft="340,286" />
+        <NodeLayout
+          Size="150,42"
+          Id="Package\Data Flow Task\OLE DB Source"
+          TopLeft="184,51" />
+        <NodeLayout
+          Size="156,42"
+          Id="Package\Data Flow Task\Data Conversion"
+          TopLeft="275,173" />
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[OLE DB Source Output]"
+          TopLeft="259,93">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="94,80"
+              Start="0,0"
+              End="94,72.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,36"
+                    Point2="0,40"
+                    Point3="4,40" />
+                  <mssgle:LineSegment
+                    End="90,40" />
+                  <mssgle:CubicBezierSegment
+                    Point1="90,40"
+                    Point2="94,40"
+                    Point3="94,44" />
+                  <mssgle:LineSegment
+                    End="94,72.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[Data Conversion Output]"
+          TopLeft="353,215">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="72.5,71"
+              Start="0,0"
+              End="72.5,63.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,31.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,31.5"
+                    Point2="0,35.5"
+                    Point3="4,35.5" />
+                  <mssgle:LineSegment
+                    End="68.5,35.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="68.5,35.5"
+                    Point2="72.5,35.5"
+                    Point3="72.5,39.5" />
+                  <mssgle:LineSegment
+                    End="72.5,63.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Data Flow Task\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Data Flow Task\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Flow Raw to Supporting">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="159,42"
+          Id="Package\Flow Raw to Supporting\OLE DB Source 1"
+          TopLeft="217,92" />
+        <NodeLayout
+          Size="180,42"
+          Id="Package\Flow Raw to Supporting\OLE DB Destination 1"
+          TopLeft="276,230" />
+        <EdgeLayout
+          Id="Package\Flow Raw to Supporting.Paths[OLE DB Source Output]"
+          TopLeft="296.5,134">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="69.5,96"
+              Start="0,0"
+              End="69.5,88.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,44" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,44"
+                    Point2="0,48"
+                    Point3="4,48" />
+                  <mssgle:LineSegment
+                    End="65.5,48" />
+                  <mssgle:CubicBezierSegment
+                    Point1="65.5,48"
+                    Point2="69.5,48"
+                    Point3="69.5,52" />
+                  <mssgle:LineSegment
+                    End="69.5,88.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Flow Raw to Supporting\OLE DB Destination 1">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Flow Raw to Supporting\OLE DB Source 1">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
